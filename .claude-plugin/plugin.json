@@ -1,6 +1,6 @@
 {
   "name": "nix-done-sound",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Your own alert sound: get notified when Claude is done or waiting for you",
   "author": {
     "name": "nikscz",
