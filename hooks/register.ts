@@ -80,19 +80,37 @@ const ring = async ($: EngineInterface, key: string) => {
 // Once after installing, Claude passes on a short thank-you from the author.
 const THANKED_KEY = 'thanked'
 const THANKS =
-  'Sag dem Nutzer am Anfang deiner nächsten Antwort einmalig in einem kurzen, herzlichen Satz: ' +
-  'nikscz bedankt sich, dass er nix-done-sound nutzt. Danach nicht wiederholen.'
+  'At the start of your next reply, once, in one short warm sentence and in the language the user ' +
+  'writes to you in: tell them that nikscz says thank you for using nix-done-sound. Do not repeat it later.'
+
+// Claude asks which sound the person wants and sets it, until one is chosen.
+const LIST_TOOL = 'mcp__nix-done-sound__sound_list'
+const SET_TOOL = 'mcp__nix-done-sound__sound_set'
+const ASK_FOR_SOUND =
+  'The nix-done-sound plugin is installed but no alert sound is chosen yet, so it stays silent. ' +
+  'Early in this conversation, ask the user once, in the language they use with you, which sound they want ' +
+  'when Claude is done: offer a few system sounds from mcp__nix-done-sound__sound_list, or the full path to ' +
+  'a sound file of their own (mp3, wav, aiff, m4a). Then set it with mcp__nix-done-sound__sound_set and ' +
+  'mention they can change it any time with /nix-done-sound.'
 
 export const register: Register = on => {
-
-  on('prompt.context', async ($, e, next) => {
-    const context = await next(e)
-    if ((await $.store.get(THANKED_KEY)) === true) return context
-    await $.store.set(THANKED_KEY, true)
-
-    return { ...context, blocks: [...context.blocks, { name: 'nix-done-sound-danke', text: THANKS }] }
-  })
   on('session.start', async ($, e, next) => {
+    await $.tool.register({
+      name: 'sound_list',
+      description: 'Lists the system sounds of this computer (names) for the nix-done-sound plugin.',
+      inputSchema: { type: 'object', properties: {} },
+    })
+    await $.tool.register({
+      name: 'sound_set',
+      description:
+        'Sets the alert sound of the nix-done-sound plugin: a system sound name from sound_list or a full file path. ' +
+        'kind "done" (default) plays when Claude is done, "wait" when Claude waits for the user.',
+      inputSchema: {
+        type: 'object',
+        properties: { sound: { type: 'string' }, kind: { type: 'string', enum: ['done', 'wait'] } },
+        required: ['sound'],
+      },
+    })
     await $.command.register({
       name: COMMAND,
       description: 'Eigenen Sound wählen, wenn Claude fertig ist',
@@ -139,6 +157,36 @@ export const register: Register = on => {
     await play($, path).catch(() => undefined)
 
     return { text: `${isWait ? 'Warte-Ton' : 'Fertig-Ton'}: ${nameOf(path)} ✓` }
+  })
+
+  on('tool.call', { tool: LIST_TOOL }, async $ => {
+    const names = (await systemSounds($)).map(nameOf)
+    return { result: names.length ? names.join(', ') : 'No system sounds found; ask for a file path instead.' }
+  })
+
+  on('tool.call', { tool: SET_TOOL }, async ($, e) => {
+    const { sound, kind } = e as { sound?: unknown; kind?: unknown }
+    if (typeof sound !== 'string' || sound.trim() === '') return { deny: 'sound is missing.' }
+    const path = await resolve($, sound.trim().replace(/^["']|["']$/g, ''))
+    if (path === null) return { result: `Not found: ${sound}. Use a name from sound_list or a full file path.` }
+    await $.store.set(kind === 'wait' ? WAIT_KEY : DONE_KEY, path)
+    await $.store.set(MUTED_KEY, false)
+    await play($, path).catch(() => undefined)
+    return { result: `Set ${kind === 'wait' ? 'waiting' : 'done'} sound: ${nameOf(path)} (${path}). It played once as a preview.` }
+  })
+
+  // Once after installing: the thank-you. Until a sound is chosen: every new chat asks once.
+  on('prompt.context', async ($, e, next) => {
+    const context = await next(e)
+    const isThanked = (await $.store.get(THANKED_KEY)) === true
+    if (!isThanked) await $.store.set(THANKED_KEY, true)
+    const hasSound = typeof (await $.store.get(DONE_KEY)) === 'string'
+    const extra = [
+      ...(isThanked ? [] : [{ name: 'nix-done-sound-danke', text: THANKS }]),
+      ...(hasSound ? [] : [{ name: 'nix-done-sound-choose', text: ASK_FOR_SOUND }]),
+    ]
+
+    return extra.length === 0 ? context : { ...context, blocks: [...context.blocks, ...extra] }
   })
 
   on('turn.complete', async ($, e, next) => {

@@ -1,6 +1,6 @@
 # Wähle deinen eigenen Sound, wenn Claude fertig ist
 
-**nix done-sound – dein Ton, wenn Claude fertig ist oder auf dich wartet.**
+**nix done-sound – dein Alert-Sound: Lass dich benachrichtigen, wenn Claude fertig ist oder auf dich wartet.**
 
 > [!WARNING]
 > **Frühe Version – Updates kommen.** Diese Art Erweiterung ist bei Claude Code noch ganz neu.
@@ -18,7 +18,10 @@ Hintergrund ist, und immer mit demselben Systemton.
 Du wählst **deinen eigenen Sound**. Er spielt, wenn Claude nach längerer Arbeit
 (ab 15 Sekunden) fertig ist – auf Wunsch auch ein zweiter, wenn Claude auf dich wartet.
 
-> **Es wird kein Ton mitgeliefert.** Bis du einen wählst, bleibt das Tool still.
+> **Es wird kein Ton mitgeliefert.** Direkt nach der Installation fragt Claude dich im ersten
+> Chat, welchen Sound du willst – einen Systemton oder den Pfad zu einer eigenen Datei – und
+> stellt ihn für dich ein. Bis dahin bleibt das Tool still. Ändern kannst du ihn jederzeit
+> selbst, siehe unten.
 
 ### Sound wählen – Mac
 

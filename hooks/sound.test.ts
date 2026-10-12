@@ -9,7 +9,9 @@ const FILES = ['/System/Library/Sounds/Glass.aiff', '/System/Library/Sounds/Tink
 const world = (on: On) => {
   const played: string[] = []
   mock.store(on)
-  on('fs.list', () => ({ value: [{ name: 'Glass.aiff', kind: 'file' }, { name: 'Tink.aiff', kind: 'file' }] }) as never)
+  // A Mac: system sounds in /System/Library/Sounds, no Windows folder
+  on('fs.list', (_, e) =>
+    ({ value: String((e as { path?: unknown }).path).startsWith('/System/') ? [{ name: 'Glass.aiff', kind: 'file' }, { name: 'Tink.aiff', kind: 'file' }] : [] }) as never)
   on('fs.exists', (_, e) => ({ value: FILES.includes(e.path) }))
   on('fs.read', (_, e) => ({ value: { base64: btoa(e.path) } }) as never)
   on('audio.play', (_, e) => {
@@ -47,4 +49,17 @@ test('an own file, a waiting sound, mute, and an unknown name', async ($, on) =>
   expect(played).toEqual([])
   expect((await $.command.run(run('Kuhglocke'))).text).toContain('nicht gefunden')
   expect((await $.command.run(run('liste'))).text).toContain('Glass, Tink')
+})
+
+test('until a sound is chosen, Claude is asked to ask for one and can set it itself', async ($, on) => {
+  const played = world(on)
+  on('prompt.context', () => ({ blocks: [] }))
+  const names = async () => (await $.prompt.context({ blocks: [] } as never)).blocks.map(b => b.name)
+  expect(await names()).toContain('nix-done-sound-choose')
+
+  const set = await $.tool.call({ tool: 'mcp__nix-done-sound__sound_set', sound: 'Glass' } as never)
+  expect(String(set.result)).toContain('Set done sound: Glass')
+  expect(played).toEqual(['/System/Library/Sounds/Glass.aiff'])
+  expect(await names()).not.toContain('nix-done-sound-choose')
+  expect(String((await $.tool.call({ tool: 'mcp__nix-done-sound__sound_list' } as never)).result)).toBe('Glass, Tink')
 })
