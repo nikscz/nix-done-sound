@@ -12,7 +12,7 @@
       "name": "nix-done-sound",
       "source": "./",
       "description": "Your own alert sound: get notified when Claude is done or waiting for you",
-      "version": "2.2.1"
+      "version": "2.2.2"
     }
   ]
 }
