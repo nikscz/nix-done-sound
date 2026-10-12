@@ -85,7 +85,7 @@ Oder von Hand, wann immer du willst:
 
 ### Neu
 
-**2.2.0 – Deutsch und Englisch.** Die festen Wörter des Tools folgen jetzt deiner Systemsprache:
+**2.2 – Deutsch und Englisch.** Die festen Wörter des Tools folgen jetzt deiner Systemsprache:
 Deutsch auf einem deutschen System, sonst Englisch. Andere Sprachen (z. B. Spanisch) bekommen die
 englischen Wörter – alles, was Claude selbst schreibt (die Schritte, der Danke-Satz, die Antworten),
 kommt aber ohnehin in deiner Sprache.

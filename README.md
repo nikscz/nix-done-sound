@@ -85,7 +85,7 @@ Or by hand, whenever you like:
 
 ### What's new
 
-**2.2.0 – German and English.** The tool's own labels now follow your system language: German
+**2.2 – German and English.** The tool's own labels now follow your system language: German
 on a German system, English everywhere else. Other languages (e.g. Spanish) get the English labels –
 but everything Claude writes itself (the steps, the thank-you, its answers) comes in your language
 anyway.
