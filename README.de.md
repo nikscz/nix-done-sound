@@ -4,6 +4,8 @@
 
 **nix done-sound – dein Alert-Sound: Lass dich benachrichtigen, wenn Claude fertig ist oder auf dich wartet.**
 
+<img src="docs/demo-de.gif" alt="Ein Ton, wenn Claude auf dich wartet (Tink) und wenn es fertig ist (Glass)" width="100%">
+
 ## Das Problem
 
 Claude arbeitet, du machst nebenbei etwas anderes – und merkst nicht, wann es fertig ist oder auf deine Antwort wartet. Die Claude-App meldet sich zwar, aber nur, wenn sie im Hintergrund ist, und immer mit demselben Systemton.

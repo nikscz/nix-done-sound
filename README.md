@@ -4,6 +4,8 @@
 
 **nix done-sound – your alert sound: get notified when Claude is done or waiting for you.**
 
+<img src="docs/demo-en.gif" alt="A sound when Claude waits for you (Tink) and when it is done (Glass)" width="100%">
+
 ## The problem
 
 Claude works, you do something else – and miss when it's done or waiting for your answer. The Claude app does notify you, but only while it's in the background, and always with the same system sound.
