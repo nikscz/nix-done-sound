@@ -6,9 +6,11 @@ const run = (args: string) => ({ command: 'nix-done-sound', args }) as never
 const turn = (durationMs: number) => ({ answer: 'ok', durationMs, isAborted: false, turnId: 't', reason: 'answer' as const })
 const FILES = ['/System/Library/Sounds/Glass.aiff', '/System/Library/Sounds/Tink.aiff', '/Users/anna/Musik/ding.mp3']
 
-const world = (on: On) => {
+const world = (on: On, code = 'de-DE') => {
   const played: string[] = []
   mock.store(on)
+  // A Mac in that language
+  on('process.run', () => ({ value: { exitCode: 0, stdout: `(\n    "${code}"\n)`, stderr: '' } }) as never)
   // A Mac: system sounds in /System/Library/Sounds, no Windows folder
   on('fs.list', (_, e) =>
     ({ value: String((e as { path?: unknown }).path).startsWith('/System/') ? [{ name: 'Glass.aiff', kind: 'file' }, { name: 'Tink.aiff', kind: 'file' }] : [] }) as never)
@@ -62,4 +64,12 @@ test('until a sound is chosen, Claude is asked to ask for one and can set it its
   expect(played).toEqual(['/System/Library/Sounds/Glass.aiff'])
   expect(await names()).not.toContain('nix-done-sound-choose')
   expect(String((await $.tool.call({ tool: 'mcp__nix-done-sound__sound_list' } as never)).result)).toBe('Glass, Tink')
+})
+
+test('on an English system it answers in English and takes English keywords', async ($, on) => {
+  world(on, 'en-US')
+  expect((await $.command.run(run(''))).text).toContain('No sound chosen yet')
+  expect((await $.command.run(run('Glass'))).text).toBe('Done sound: Glass ✓')
+  expect((await $.command.run(run('off'))).text).toBe('Sound is off.')
+  expect((await $.command.run(run('list'))).text).toContain('Glass, Tink')
 })

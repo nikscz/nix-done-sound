@@ -1,7 +1,7 @@
 {
   "name": "nix-done-sound",
-  "version": "2.1.0",
-  "description": "Alert-Sound: Lass dich benachrichtigen, wenn Claude fertig ist – mit deinem eigenen Ton",
+  "version": "2.2.0",
+  "description": "Your own alert sound: get notified when Claude is done or waiting for you",
   "author": {
     "name": "nikscz",
     "url": "https://github.com/nikscz"

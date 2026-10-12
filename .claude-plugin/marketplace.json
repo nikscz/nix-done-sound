@@ -5,14 +5,14 @@
     "url": "https://github.com/nikscz"
   },
   "metadata": {
-    "description": "Alert-Sound: Lass dich benachrichtigen, wenn Claude fertig ist – mit deinem eigenen Ton"
+    "description": "Your own alert sound: get notified when Claude is done or waiting for you"
   },
   "plugins": [
     {
       "name": "nix-done-sound",
       "source": "./",
-      "description": "Alert-Sound: Lass dich benachrichtigen, wenn Claude fertig ist – mit deinem eigenen Ton",
-      "version": "2.1.0"
+      "description": "Your own alert sound: get notified when Claude is done or waiting for you",
+      "version": "2.2.0"
     }
   ]
 }
