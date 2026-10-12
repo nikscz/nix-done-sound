@@ -68,6 +68,25 @@ Kein GitHub-Konto nötig.
 Deine Wahl gilt für alle Chats. Englische Befehle gehen auch (`list`, `wait`, `off`, `on`).
 Ob Claude Code unter Windows Töne abspielt, ist noch wenig getestet – sag gern Bescheid.
 
+## Datenschutz & Sicherheit
+
+Alles bleibt auf deinem Rechner:
+
+| Liest | Speichert |
+|---|---|
+| Die Liste deiner Systemtöne und die Tondatei, die du wählst | den Pfad zu deinem Ton, in Claude Codes Plugin-Speicher |
+| Wann Claude fertig ist oder dir eine Erlaubnis- oder Rückfrage zeigt | nichts – es spielt nur deinen Ton |
+
+**Schickt nichts irgendwohin.** Keine Internetverbindung, kein Tracking, keine Statistik – der Code
+enthält gar keine Netzwerkaufrufe. Er ist offen und kurz, jeder kann das nachprüfen.
+
+Zwei Dinge, die man wissen sollte:
+
+- **Sprach-Check:** Einmal pro Chat läuft ein harmloser Systembefehl, der deine Systemsprache liest –
+  `defaults read -g AppleLanguages` auf dem Mac, `(Get-Culture).TwoLetterISOLanguageName` in PowerShell unter Windows.
+- **Anweisungen an Claude:** Das Tool gibt Claude ein paar Zeilen mit (z. B. wie es das Tool benutzt, und den
+  einmaligen Danke-Satz). Nachlesen kannst du sie im Code.
+
 > [!WARNING]
 > **Frühe Version – Updates kommen.** Diese Art Erweiterung ist bei Claude Code noch ganz neu.
 > Nach einem Update von Anthropic kann etwas nicht mehr funktionieren, bis hier ein Fix kommt.
