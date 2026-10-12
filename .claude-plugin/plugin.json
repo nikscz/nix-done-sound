@@ -1,0 +1,11 @@
+{
+  "name": "nix-done-sound",
+  "version": "2.0.0",
+  "description": "Wähle deinen eigenen Sound, wenn Claude fertig ist oder auf dich wartet",
+  "author": {
+    "name": "nikscz",
+    "url": "https://github.com/nikscz"
+  },
+  "repository": "https://github.com/nikscz/nix-done-sound",
+  "license": "MIT"
+}
